@@ -1,0 +1,10 @@
+.env
+.vscode
+artifacts
+cache
+node_modules
+scipts_python/.idea
+scipts_python/venv
+scipts_python/fake_addresses.txt
+scipts_python/test_users.txt
+scipts_python/test.py
