@@ -2,7 +2,7 @@
 
 token: https://sepolia.etherscan.io/address/0xe6a3B4E20b4bb4216DEB2834A97Ede20F82EeE25
 
-mixer: https://sepolia.etherscan.io/address/0x25bB1Bf9b59040bfde2B4eB4eC03dffE2C041cF9'
+mixer: https://sepolia.etherscan.io/address/0x25bB1Bf9b59040bfde2B4eB4eC03dffE2C041cF9
 
 verifier: https://sepolia.etherscan.io/address/0x979f3be8d44E32B56909DB16614F07CE6C4b5291
 
