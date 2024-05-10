@@ -18,7 +18,7 @@ contract Mixer {
     bytes32 valueToProof;
     uint mixerTotalAmount;
     uint randNonce;
-    address[] fake_addresses;
+    address[] fakeAddresses;
 
     DigitalRub public dRub;
     IVerifier public verifier;
@@ -27,13 +27,13 @@ contract Mixer {
     event Withdraw(address indexed sender);
     event Mix();
 
-    constructor(address token_address) {
-        dRub = DigitalRub(token_address);
+    constructor(address tokenAddress) {
+        dRub = DigitalRub(tokenAddress);
     }
 
     receive() external payable {}
 
-    function current_deposit(address account) external view returns (uint) {
+    function currentDeposit(address account) external view returns (uint) {
         return balances[account];
     }
 
@@ -68,12 +68,12 @@ contract Mixer {
     }
 
     // отправитель средств добавляет контракт для проверки доказательства
-    function addVerifier(address verifier_address) public {
+    function addVerifier(address verifierAddress) public {
         require(
             commitments[msg.sender],
             "msg sender is not in senders or verifier has been already added"
         );
-        verifier = IVerifier(verifier_address);
+        verifier = IVerifier(verifierAddress);
     }
 
     // сначала закидываем на все псевдо адреса по одинаковому количеству монет
@@ -112,7 +112,7 @@ contract Mixer {
         }
 
         commitments[msg.sender] = false;
-        fake_addresses = _addresses;
+        fakeAddresses = _addresses;
         emit Mix();
     }
 
@@ -124,26 +124,26 @@ contract Mixer {
         uint[2] calldata _pC,
         uint[1] calldata _pubSignals
     ) public {
-        require(fake_addresses.length > 0, "tokens haven't been mixed yet!");
+        require(fakeAddresses.length > 0, "tokens haven't been mixed yet!");
         require(
             verifier.verifyProof(_pA, _pB, _pC, _pubSignals),
             "proof has not been accepted!"
         );
 
-        for (uint i = 0; i < fake_addresses.length; i++) {
-            if (balances[fake_addresses[i]] != 0) {
+        for (uint i = 0; i < fakeAddresses.length; i++) {
+            if (balances[fakeAddresses[i]] != 0) {
                 dRub.transferFrom(
-                    fake_addresses[i],
+                    fakeAddresses[i],
                     msg.sender,
-                    balances[fake_addresses[i]]
+                    balances[fakeAddresses[i]]
                 );
-                mixerTotalAmount -= balances[fake_addresses[i]];
-                balances[fake_addresses[i]] = 0;
+                mixerTotalAmount -= balances[fakeAddresses[i]];
+                balances[fakeAddresses[i]] = 0;
             }
         }
 
         valueToProof = 0x0;
-        delete fake_addresses;
+        delete fakeAddresses;
 
         emit Withdraw(msg.sender);
     }
